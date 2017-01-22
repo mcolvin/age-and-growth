@@ -1,0 +1,39 @@
+---
+output: word_document
+---
+
+
+
+```{r, echo=FALSE}
+setwd("~/projects/Age and Growth/Analysis/Stage 1")
+
+dat<- read.csv("./output/xx.csv")[,-1]
+```
+
+```{r, echo=FALSE}
+plot(ss~linf,dat, subset=parm=="ma",type='n',main="Mean age",
+     ylab="Sample size",las=1)
+points(ss~linf,dat, subset=parm=="ma" & type=="mape low",type='b',col="black", pch=19)
+
+
+
+points(ss~linf,dat, subset=parm=="ma" & type=="mape high",type='b',col="grey", pch=19)
+legend("topleft", c("5%","10%"), pch=19,col=c("black","grey"))
+
+plot(ss~linf,dat, subset=parm=="mla",type='n',main="Mean length at age",
+     ylab="Sample size",las=1)
+points(ss~linf,dat, subset=parm=="mla" & type=="mape low",type='b',col="black", pch=19)
+points(ss~linf,dat, subset=parm=="mla" & type=="mape high",type='b',col="grey", pch=19)
+legend("topleft", c("5%","10%"), pch=19,col=c("black","grey"))
+
+plot(ss~linf,dat, subset=parm=="af",type='n',main="Age frequency",
+     ylab="Sample size",las=1)
+points(ss~linf,dat, subset=parm=="af" & type=="mape low",type='b',col="black", pch=19)
+points(ss~linf,dat, subset=parm=="af" & type=="mape high",type='b',col="grey", pch=19)
+legend("topright", c("1%","2%"), pch=19,col=c("black","grey"))
+
+
+
+
+
+```

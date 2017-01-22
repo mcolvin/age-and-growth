@@ -1,0 +1,108 @@
+
+
+```{r, include=FALSE}
+setwd("C:/Users/mcolvin/Documents/projects/Age and Growth/Analysis/Sample Type Bias")
+  source("./src/1_global.R")  	
+	source("./src/2_functions.R")         
+	source("./src/3_load.R")     
+  source("./src/4_clean.R")
+ 	source("./src/5_tables.R")
+	source("./src/6_figures.R") 
+```
+
+
+# How does sampling type effect parameter estimate bias and precision?
+
+## Introduction
+
+The parameters of a von Bertalanffy growth function are commonly estimated given 
+age-length data for individual fish.  These parameters are used to assess growth, 
+mortality, and production of a fish population.  These parameters are also used 
+to estimate mortality and production.  
+* uncertainty (i.e., se is not of concern)
+
+
+## Objectives
+
+The objectives of this analysis were to compare the effect of simple random  
+sampling (srs), binning, age length key expansion, and reweighting on 
+parameter estimates and uncertainty.  
+
+The expectation was that parameter estimate bias should not be 
+terrible but the uncertainty around the estimates may be overly 
+precise.  In other words, non-random sampling will likely result 
+in over estimation of precision.   
+
+## Methods
+
+Overview.&mdash;A simulation was used to compare parameter estimates of a 
+VBGF among the 4 sampling strategies.  The simple random sample is unbiased 
+and was used as the baseline to evaluate bias in parameter estimates and uncertainty.  
+
+True population.&mdash;A reference true population was generated and simple 
+random sample. We used the same population parameters used by C  for two life-history types: 
+short-lived high-productivity (SLHP) and long-lived low-productivity (LLLP) species
+
+$L_{\infty}$ was ....  
+$K$ was 
+$t_0$ was 0 
+
+$L_{age}=L_{\infty}\cdot e^{-k\cdot(age-t_0)}$  
+
+error:  
+$e_i \sim N(0,\sigma)$ or  
+$e_i \sim e^{N(0,\sigma)}$  
+
+Sample size was same as Coogins
+
+
+Sampling strategies.&mdash;    
+1. Binning
+2. Age length key expansion
+3. Rewighting
+
+#### Analysis
+
+## Results
+
+* binning: as the number of indviduals per bin is small the sample converges to a random sample.  
+In other words the effect of 'binning', if there are only a couple of full bins 
+
+### Reference dataset
+
+### Bias and precision
+
+## Figures
+
+```{r,echo=FALSE}
+figures(1)
+```
+
+Figure 1.  Effect of sampling type and estimation on the distribution of point estimates of Linf, k, and t0 for a short lived, small bodied, fast growing fish.  The dotted line denotes the true value.  
+
+
+```{r,echo=FALSE}
+figures(2)
+```
+
+Figure 2.  Effect of sampling type and estimation on the distribution of standard error estimates for Linf, k, and t0 for a short lived, small bodied, fast growing fish.  The dotted line denotes the true value.  
+
+
+```{r,echo=FALSE}
+figures(3)
+```
+
+Figure 3.  Effect of sampling type and estimation on the distribution of point estimates of Linf, k, and t0 for a long lived, large bodied, slow growing fish.  The dotted line denotes the true value.  
+
+
+```{r,echo=FALSE}
+figures(4)
+```
+
+Figure 4.  Effect of sampling type and estimation on the distribution of standard error estimates for Linf, k, and t0 for a long lived, large bodied, slow growing fish.  The dotted line denotes the true value.  
+
+## Tables  
+
+```{r, echo=FALSE}
+kable(vbgf_parms)
+```

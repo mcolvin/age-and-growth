@@ -1,0 +1,9 @@
+Species,linf,K,t0,units,tmax
+Largemouth Bass,60,0.2,-0.023,cm,15
+Bluegill,21.5,0.45,-0.313,cm,6
+White Crappie,35,0.35,-0.197,cm,8
+Sauger,47.8,0.49,0.013,cm,6
+Yellow Perch,25.5,0.33,0.031,cm,9
+Walleye,70.7,0.29,-0.5,cm,10
+Channel Catfish,84.4,0.1,0.669,cm,31
+Norther Pike,87.5,0.18,-0.18,cm,16

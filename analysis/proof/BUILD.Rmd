@@ -1,0 +1,136 @@
+---
+title: "Sample size proof"
+date: "Sunday, May 17, 2015"
+output: word_document
+---
+
+```{r setup, echo=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_knit$set(root.dir = 'C:/Users/mcolvin/Documents/projects/Age and Growth/Analysis/proof')
+```
+
+## Overview
+
+The population was for a generic fis population with a $L\infty$ = 60, k = 0.2, and $t_0$ = -0.023.  
+
+The approach was a 2 stage sampling design where a simple random sample was taken, then and age length key (ALK) was used.  The nubmer of fish per bin was 10.  
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(plyr)
+library(knitr)
+rebuilddata<- FALSE
+if(rebuilddata==TRUE)
+  {
+  # MEAN LENGTH AND AGE
+  dat<- read.csv("proof_out_blg.csv")
+  mn<- ddply(dat[dat$type=="srs",],.(ss,bin,bin_n,sim),
+              summarize, 
+              srs_mn_len=mean(length),
+              srs_mn_age=mean(age))
+  alk<- ddply(dat[dat$type=="alk",],.(bin,bin_n,sim),
+              summarize, 
+              n_aged=mean(ss),
+              alk_mn_age=mean(age))
+  mn<- merge(mn,alk,by=c("bin","bin_n","sim"))
+  pop<- ddply(dat[dat$type=="pop",],.(bin),
+              summarize, 
+              pop_mn_len=mean(length),
+              pop_mn_age=mean(age))
+  mn<-  merge(mn,pop,by=c("bin"))
+  dat<- mn
+  dat$length_prop<- abs((dat$srs_mn_len-dat$pop_mn_len)/dat$pop_mn_len) 
+  dat$age_prop<- abs((dat$alk_mn_age-dat$srs_mn_age)/dat$srs_mn_age)
+  dat$length_p<- ifelse(dat$length_prop<=0.05,1,0)
+  dat$age_p<- ifelse(dat$age_prop<=0.05,1,0)
+  
+  # length structure
+  lstruc<- read.csv("proof_len_structure_blg.csv")
+  mn<- ddply(lstruc[lstruc$level=="srs",],.(ss,bin,bin_n,sim,l_bin),
+              summarize, 
+              rel_freq=mean(rel_freq))
+  pop<- ddply(lstruc[lstruc$level=="pop",],.(bin,l_bin),
+              summarize, 
+              rel_freq=mean(rel_freq))
+  lstruca<-  merge(mn,pop,by=c("bin","l_bin")) 
+  lstruca$sim1<- apply(cbind(lstruca$rel_freq.x,lstruca$rel_freq.y),1,min)
+  len_sim<- aggregate(sim1~ss+sim+bin+bin_n,lstruca,sum)
+  len_sim$tmp<-ifelse(len_sim$sim1>=0.9,1,0)
+  len_tmp<- aggregate(tmp~ss+bin+bin_n,len_sim, mean) 
+  
+  # age structure
+  astruc<- read.csv("proof_age_structure_blg.csv")
+  mn<- ddply(astruc[astruc$level=="srs",],.(ss,bin,bin_n,sim,age),
+              summarize, 
+              rel_freq=mean(rel_freq))
+  alk<- ddply(astruc[astruc$level=="alk",],.(ss,bin,bin_n,sim,age),
+              summarize, 
+              rel_freq=mean(rel_freq))  
+  astruc<-  merge(mn,alk,by=c("ss","bin","bin_n","sim","age")) 
+  astruc$sim1<- apply(cbind(astruc$rel_freq.x,astruc$rel_freq.y),1,min)
+  age_sim<- aggregate(sim1~ss+sim+bin+bin_n,astruc,sum)
+  age_sim$tmp<-ifelse(age_sim$sim1>=0.9,1,0)
+  age_tmp<- aggregate(tmp~ss+bin+bin_n,age_sim, mean)
+  
+  mean_plot_dat<- aggregate(cbind(length_p,age_p,n_aged)~ss+bin+bin_n,dat,mean)
+  mean_plot_dat$ss_len<- ifelse(mean_plot_dat$length_p<0.9,NA,mean_plot_dat$ss)
+  mean_plot_dat$ss_age<- ifelse(mean_plot_dat$age_p<0.9,NA,mean_plot_dat$ss)
+  save( mean_plot_dat,len_tmp,age_tmp,file="load.Rdata")
+  } 
+if(rebuilddata==FALSE)
+  {
+  load("load.Rdata")
+  }
+```
+
+## Mean length and age
+
+### Sample size results
+```{r,echo=FALSE}
+# MEAN LENGTH
+
+plot(length_p~ss,mean_plot_dat,type="n",las=1,ylab="Reliability",ylim=c(0.5,1))
+points(length_p~ss,mean_plot_dat,type="l",col="black",lwd=2, lty=1,subset=bin==10)
+points(length_p~ss,mean_plot_dat,type="l",col="black",lwd=2, lty=2,subset=bin==25)
+points(age_p~ss,mean_plot_dat,type="l",col="grey",lwd=1, lty=1,subset=bin==10)
+points(age_p~ss,mean_plot_dat,type="l",col="grey",lwd=2, lty=2,subset=bin==25)
+abline(h=0.8,lty=2)
+legend("bottomright", c("Length structure (1 cm)", "Length structure (2.5 cm)","Age Structure (1 cm)","Age Structure (2.5 cm)"),lty=c(1,2,1,2),col=c("black","black","grey","grey"))
+```
+
+Caption.&mdash; Proportion of samples meeting mean length and age objectives (within 10% of true value; y-axis) and primary sample size (a simple random sample (SRS); x-axis).  Note: mean age for the SRS was calculated by expanding the age length key to the SRS.  
+
+## Length and age structure 
+
+This section evaluates the sample sizes need to reliably estimate length and age structure.
+
+
+```{r,echo=FALSE}
+
+
+plot(tmp~ss,len_tmp,type="n",lwd=2,ylab="Reliability",las=1,subset=bin==10)
+points(tmp~ss,len_tmp,type="l",lwd=2,subset=bin==10,lty=1)
+points(tmp~ss,len_tmp,type="l",lwd=2,subset=bin==25,lty=2)
+points(tmp~ss,age_tmp,col="grey",lty=1,type="l",lwd=2,subset=bin==10)
+points(tmp~ss,age_tmp,col="grey",lty=2,type="l",lwd=2,subset=bin==25)
+abline(h=0.8)
+legend("bottomright", c("Length structure (1 cm)", "Length structure (2.5 cm)","Age Structure (1 cm)","Age Structure (2.5 cm)"),lty=c(1,2,1,2),col=c("black","black","grey","grey"))
+```
+
+Caption.&mdash; Proportion of samples meeting mean length and age objectives (within 80% similarity of true distribution; y-axis) and primary sample size (a simple random sample (SRS); x-axis).   
+
+
+```{r,echo=FALSE}
+# TABLE OF SAMPLE SIZES
+
+
+
+out<- ddply(mean_plot_dat,.(bin,bin_n),summarize,
+            ss_len=min(na.omit(ss_len)),
+             ss_age=min(na.omit(ss_age)))
+kable(out,col.names=c("Bin interval", "Mean length","Mean age"))
+
+
+#mean_plot_dat
+#age_tmp
+
+#len_tmp
+```
