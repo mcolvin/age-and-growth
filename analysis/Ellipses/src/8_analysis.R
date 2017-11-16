@@ -23,3 +23,8 @@ plot(K~Linf, fish_dat_fin_ray,subset=Linf>=20 & Linf<100)
 abline(coef(fit)[1],coef(fit)[2],col="lightgrey", lwd=4)
 
 vbgf(210,0.
+
+
+
+
+
