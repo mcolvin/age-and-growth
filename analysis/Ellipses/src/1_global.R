@@ -1,7 +1,0 @@
-library(plyr)
-library(reshape2)
-library(car)
-library(quantreg)
-library(SDMTools)
-library(nls2)
-options(scipen=15)

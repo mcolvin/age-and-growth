@@ -24,19 +24,4 @@ if(n==2)
 	boxplot(prop_bias~ss,vbgf_dat, 
 		subset=parm=="k")
 	}
-if(n==3)
-	{
-	}
-if(n==4)
-	{
-	}
-if(n==5)
-	{
-	}
-if(n==6)
-	{
-	}
-if(n==7)
-	{
-	}
 }

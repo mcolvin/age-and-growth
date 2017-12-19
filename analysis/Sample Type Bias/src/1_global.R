@@ -1,6 +1,0 @@
-library(plyr,quietly=TRUE)
-library(reshape2,quietly=TRUE)
-library(quantreg,quietly=TRUE)
-library(SDMTools,quietly=TRUE)
-library(nls2,quietly=TRUE)
-library(knitr)
