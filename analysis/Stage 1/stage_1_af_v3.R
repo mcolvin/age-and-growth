@@ -1,6 +1,6 @@
 # MEAN AGE: STAGE 2	
-require(plyr)
-require(reshape2)
+library(plyr)
+library(reshape2)
 library(FSA)
 setwd("C:/Users/mcolvin/Documents/projects/Age and Growth/Analysis/Stage 1")
 

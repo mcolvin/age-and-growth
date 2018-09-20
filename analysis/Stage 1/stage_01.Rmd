@@ -5,8 +5,6 @@ output: word_document
 
 
 ```{r, echo=FALSE}
-setwd("~/projects/Age and Growth/Analysis/Stage 1")
-
 dat<- read.csv("./output/xx.csv")[,-1]
 ```
 
